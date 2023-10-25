@@ -1,6 +1,8 @@
 <script setup>
-import { reactive } from 'vue';
-
+  import { reactive } from 'vue';
+  import Header from './components/Header.vue'
+  import Form from './components/Form.vue'
+  import TaskList from './components/TaskList.vue'
 const estado = reactive({
   filtro: 'todas',
   tarefaTemporaria: '',
@@ -51,37 +53,11 @@ const estado = reactive({
 
 <template>
   <div class="container">
-    <header class="p-5 mb-4 mt-4 bg-light rounded-3">
-      <h1>Minhas Tarefas</h1>
-      <p>
-        Voce Possui {{getTarefaPendentes().length}} tarefas pendentes
-      </p>
-    </header>
-    <form @submit.prevent="cadastraTarefa">
-      <div class="row">
-        <div class="col">
-          <input :value="estado.tarefaTemporaria" @change="evento => estado.tarefaTemporaria = evento.target.value" required type="text" placeholder="Digite Aqui a descricao da tarefa" class="form-control">
-        </div>
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-primary">cadastrar</button>
-        </div>
-        <div class="col-md-2">
-          <select @change="evento => estado.filtro = evento.target.value" class="form-control">
-            <option value="todas">Todas tarefas</option>
-            <option value="pendentes">Tarefas pendentes</option>
-            <option value="finalizadas">Tarefas finalizadass</option>
-          </select>
-        </div>
-      </div>
-    </form>
-    <ul class="list-group mt-4">
-      <li class="list-group-item" v-for="tarefa in getTarefaFiltradas()">
-        <input @change="evento => tarefa.finalizada = evento.target.checked" :checked="tarefa.finalizada" :id="tarefa.titulo" type="checkbox">
-        <label :class="{done: tarefa.finalizada}" class="ms-3" :for="tarefa.titulo">
-          {{ tarefa.titulo }}
-        </label>
-      </li>
-    </ul>
+    <Header :tarefas-pendentes="getTarefaPendentes().length"></Header>
+    <Form :trocarFiltro="evento => estado.filtro = evento.target.value" :tarefaTemporaria ="estado.tarefatemp" :edtaTarefaTemp="evento => estado.tarefaTemporaria = evento.target.value" :cadastraTarefa="cadastraTarefa"></Form>
+    <TaskList :tarefas="getTarefaFiltradas()"></TaskList>
+    
+    
   </div>
 </template>
 <style scoped>
